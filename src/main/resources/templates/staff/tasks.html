@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-staff :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">Assigned Tasks</h4>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>Title</th><th>Description</th><th>Deadline</th><th>Priority</th><th>Status</th><th>Update</th></tr></thead>
+                <tbody>
+                <tr th:each="t : ${tasks}">
+                    <td class="fw-semibold" th:text="${t.title}">Title</td>
+                    <td class="small text-muted" th:text="${#strings.abbreviate(t.description,60)}">desc</td>
+                    <td class="small" th:text="${t.deadline != null ? #temporals.format(t.deadline,'dd MMM yyyy') : '-'}">date</td>
+                    <td><span class="badge" th:classappend="${t.priority.name()=='HIGH'}?'bg-danger':(${t.priority.name()=='MEDIUM'}?'bg-warning text-dark':'bg-secondary')" th:text="${t.priority.label}">P</span></td>
+                    <td><span class="badge" th:classappend="${t.status.name()=='COMPLETED'}?'bg-success':(${t.status.name()=='IN_PROGRESS'}?'bg-info text-dark':'bg-secondary')" th:text="${t.status.label}">S</span></td>
+                    <td>
+                        <form th:action="@{'/staff/tasks/' + ${t.id} + '/status'}" method="post" class="d-flex gap-1">
+                            <select name="status" class="form-select form-select-sm" style="min-width:130px;">
+                                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s.label}" th:selected="${s == t.status}"></option>
+                            </select>
+                            <button class="btn btn-sm btn-info"><i class="bi bi-check2"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(tasks)}"><td colspan="6" class="text-center text-muted py-4">No tasks assigned</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

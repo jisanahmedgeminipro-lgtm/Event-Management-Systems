@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('About Us')}"></head>
+<body>
+<nav th:replace="~{fragments/public-navbar :: navbar('about')}"></nav>
+
+<section class="section" style="padding-top:130px;">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <img src="https://picsum.photos/seed/aboutshrabon/700/520" class="img-fluid rounded-4 shadow" alt="About">
+            </div>
+            <div class="col-lg-6">
+                <div class="divider-accent ms-0"></div>
+                <h2 class="section-title">About Shrabon Decorator &amp; Event Management</h2>
+                <p class="text-muted">Founded and led by proprietor <strong>Md. Tara Mia</strong>, Shrabon Decorator &amp;
+                    Event Management has grown into one of the most trusted names for event planning, decoration and
+                    catering. We blend creativity, discipline and warm hospitality to deliver flawless celebrations.</p>
+                <p class="text-muted">From grand weddings and corporate conferences to intimate birthdays and cultural
+                    programs, our dedicated team handles every detail so you can simply enjoy the moment.</p>
+                <div class="row mt-4">
+                    <div class="col-6">
+                        <h3 class="text-gold fw-bold mb-0">10+</h3>
+                        <p class="text-muted">Years of Experience</p>
+                    </div>
+                    <div class="col-6">
+                        <h3 class="text-gold fw-bold mb-0">500+</h3>
+                        <p class="text-muted">Events Delivered</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission / Vision / Achievements -->
+<section class="section" style="background:var(--light-bg);">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="why-box h-100">
+                    <div class="icon-circle"><i class="bi bi-bullseye"></i></div>
+                    <h4>Our Mission</h4>
+                    <p class="text-muted mb-0">To craft memorable, stress-free events through creative design,
+                        transparent pricing and reliable execution for every client.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="why-box h-100">
+                    <div class="icon-circle"><i class="bi bi-eye"></i></div>
+                    <h4>Our Vision</h4>
+                    <p class="text-muted mb-0">To be the leading event management brand in Bangladesh, recognised for
+                        excellence, innovation and customer delight.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="why-box h-100">
+                    <div class="icon-circle"><i class="bi bi-trophy"></i></div>
+                    <h4>Achievements</h4>
+                    <ul class="text-muted mb-0 ps-3">
+                        <li>500+ successful events</li>
+                        <li>Award-winning decoration team</li>
+                        <li>98% client satisfaction rate</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Company History -->
+<section class="section">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">Our Journey</h2>
+            <p class="section-subtitle">A decade of turning ideas into celebrations</p>
+        </div>
+        <p class="text-muted text-center mx-auto" style="max-width:820px;">
+            What began as a small decoration service in Dhaka has blossomed into a full-service event management
+            company. Over the years, Shrabon has expanded its offerings to include catering, photography,
+            videography, lighting, sound and complete stage setup — all under one roof, managed end-to-end by our
+            in-house professionals and trusted vendor partners.
+        </p>
+    </div>
+</section>
+
+<!-- Management / Owner profiles -->
+<section class="section" style="background:var(--light-bg);">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">Meet Our Management</h2>
+            <p class="section-subtitle">The people behind every successful event</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card text-center">
+                    <img src="https://picsum.photos/seed/owner1/400/400" class="card-img-top" style="height:280px;object-fit:cover;" alt="Owner">
+                    <div class="card-body">
+                        <h5 class="mb-0">Md. Tara Mia</h5>
+                        <p class="text-gold fw-semibold mb-2">Founder &amp; Proprietor</p>
+                        <p class="text-muted small mb-0">Visionary leader guiding the company with a passion for
+                            perfection and customer happiness.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card text-center">
+                    <img src="https://picsum.photos/seed/owner2/400/400" class="card-img-top" style="height:280px;object-fit:cover;" alt="Manager">
+                    <div class="card-body">
+                        <h5 class="mb-0">Rumana Akter</h5>
+                        <p class="text-gold fw-semibold mb-2">Operations Manager</p>
+                        <p class="text-muted small mb-0">Ensures every event runs on schedule with precision and care.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card text-center">
+                    <img src="https://picsum.photos/seed/owner3/400/400" class="card-img-top" style="height:280px;object-fit:cover;" alt="Designer">
+                    <div class="card-body">
+                        <h5 class="mb-0">Shakil Ahmed</h5>
+                        <p class="text-gold fw-semibold mb-2">Lead Decoration Designer</p>
+                        <p class="text-muted small mb-0">Creative mind behind our signature themes and stage designs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

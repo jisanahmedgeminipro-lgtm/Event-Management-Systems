@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Gallery')}"></head>
+<body>
+<nav th:replace="~{fragments/public-navbar :: navbar('gallery')}"></nav>
+
+<section class="section" style="padding-top:130px;">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">Our Gallery</h2>
+            <p class="section-subtitle">Moments we have beautifully crafted</p>
+        </div>
+        <div class="row g-3 gallery-grid">
+            <div class="col-lg-3 col-md-4 col-6" th:each="g : ${galleryItems}">
+                <a th:href="${g.imageUrl}" target="_blank">
+                    <img th:src="${g.imageUrl}" th:alt="${g.title}">
+                </a>
+                <p class="small text-center text-muted mt-1 mb-0" th:text="${g.title}"></p>
+            </div>
+            <div class="col-12 text-center text-muted py-5" th:if="${#lists.isEmpty(galleryItems)}">
+                <i class="bi bi-images display-4 d-block mb-2"></i>
+                <p>Gallery images coming soon.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

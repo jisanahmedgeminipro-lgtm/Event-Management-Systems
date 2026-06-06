@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Reviews')}"></head>
+<body>
+<nav th:replace="~{fragments/public-navbar :: navbar('reviews')}"></nav>
+
+<section class="section" style="padding-top:130px;">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">Customer Reviews</h2>
+            <p class="section-subtitle">
+                <span class="stars">
+                    <i class="bi" th:each="i : ${#numbers.sequence(1,5)}"
+                       th:classappend="${i <= avgRating} ? 'bi-star-fill' : 'bi-star'"></i>
+                </span>
+                <span class="ms-2" th:text="${#numbers.formatDecimal(avgRating,1,1)} + ' / 5 from our happy clients'">5/5</span>
+            </p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4" th:each="r : ${reviews}">
+                <div class="card review-card p-4 h-100">
+                    <div class="stars mb-2">
+                        <i class="bi" th:each="i : ${#numbers.sequence(1,5)}"
+                           th:classappend="${i <= r.rating} ? 'bi-star-fill' : 'bi-star'"></i>
+                    </div>
+                    <p class="text-muted fst-italic flex-grow-1" th:text="${r.comment}">Comment</p>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <span class="avatar-circle"><i class="bi bi-person-fill"></i></span>
+                        <div>
+                            <div class="fw-semibold" th:text="${r.client.user.fullName}">Client</div>
+                            <small class="text-muted" th:text="${#temporals.format(r.createdAt,'dd MMM yyyy')}">date</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 text-center text-muted py-5" th:if="${#lists.isEmpty(reviews)}">
+                <i class="bi bi-star display-4 d-block mb-2"></i>
+                <p>No reviews yet. Be the first to share your experience!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

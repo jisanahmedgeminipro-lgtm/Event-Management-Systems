@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-client :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="mb-0">Booking <span class="text-success" th:text="${booking.bookingReference}">REF</span></h4>
+        <a th:href="@{/client/bookings}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+    </div>
+
+    <!-- Status tracker -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between text-center booking-tracker" th:with="st=${booking.status.name()}">
+                <div class="flex-fill">
+                    <i class="bi fs-4" th:classappend="${st != 'CANCELLED'}?'bi-check-circle-fill text-success':'bi-circle text-muted'"></i>
+                    <div class="small">Pending</div>
+                </div>
+                <div class="flex-fill">
+                    <i class="bi fs-4" th:classappend="${st=='CONFIRMED' or st=='IN_PROGRESS' or st=='COMPLETED'}?'bi-check-circle-fill text-success':'bi-circle text-muted'"></i>
+                    <div class="small">Confirmed</div>
+                </div>
+                <div class="flex-fill">
+                    <i class="bi fs-4" th:classappend="${st=='IN_PROGRESS' or st=='COMPLETED'}?'bi-check-circle-fill text-success':'bi-circle text-muted'"></i>
+                    <div class="small">In Progress</div>
+                </div>
+                <div class="flex-fill">
+                    <i class="bi fs-4" th:classappend="${st=='COMPLETED'}?'bi-check-circle-fill text-success':'bi-circle text-muted'"></i>
+                    <div class="small">Completed</div>
+                </div>
+            </div>
+            <div th:if="${booking.status.name()=='CANCELLED'}" class="alert alert-danger mt-3 mb-0">This booking was cancelled.</div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card mb-4">
+                <div class="card-header">Event Details</div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Event Type</dt><dd class="col-sm-8" th:text="${booking.category != null ? booking.category.name : '-'}">-</dd>
+                        <dt class="col-sm-4">Package</dt><dd class="col-sm-8" th:text="${booking.eventPackage != null ? booking.eventPackage.name : 'Custom'}">-</dd>
+                        <dt class="col-sm-4">Date / Time</dt><dd class="col-sm-8"><span th:text="${#temporals.format(booking.eventDate,'dd MMM yyyy')}"></span> <span th:if="${booking.eventTime}" th:text="${booking.eventTime}"></span></dd>
+                        <dt class="col-sm-4">Venue</dt><dd class="col-sm-8" th:text="${booking.venue}">-</dd>
+                        <dt class="col-sm-4">Guests</dt><dd class="col-sm-8" th:text="${booking.guestCount}">-</dd>
+                        <dt class="col-sm-4">Requirements</dt><dd class="col-sm-8" th:text="${booking.specialRequirements} ?: '-'">-</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="card" th:if="${not #lists.isEmpty(booking.customizations)}">
+                <div class="card-header">Selected Extras</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between" th:each="c : ${booking.customizations}">
+                        <span th:text="${c.item.name}">Item</span>
+                        <span th:text="'৳' + ${#numbers.formatDecimal(c.lineTotal,1,'COMMA',0,'POINT')}">0</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card mb-4">
+                <div class="card-header">Pricing</div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between"><span>Base</span><span th:text="'৳' + ${#numbers.formatDecimal(booking.baseAmount,1,'COMMA',2,'POINT')}">0</span></div>
+                    <div class="d-flex justify-content-between"><span>Additional</span><span th:text="'৳' + ${#numbers.formatDecimal(booking.additionalAmount,1,'COMMA',2,'POINT')}">0</span></div>
+                    <div class="d-flex justify-content-between text-danger"><span>Discount</span><span th:text="'- ৳' + ${#numbers.formatDecimal(booking.discountAmount,1,'COMMA',2,'POINT')}">0</span></div>
+                    <hr>
+                    <div class="d-flex justify-content-between fw-bold fs-5"><span>Total</span><span th:text="'৳' + ${#numbers.formatDecimal(booking.totalAmount,1,'COMMA',2,'POINT')}">0</span></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">Payment
+                    <span class="badge" th:classappend="${payment.status.name()=='PAID'}?'bg-success':(${payment.status.name()=='PARTIAL'}?'bg-info text-dark':'bg-warning text-dark')" th:text="${payment.status.label}">Status</span>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between text-success"><span>Paid</span><span th:text="'৳' + ${#numbers.formatDecimal(payment.paidAmount,1,'COMMA',2,'POINT')}">0</span></div>
+                    <div class="d-flex justify-content-between text-danger"><span>Due</span><span th:text="'৳' + ${#numbers.formatDecimal(payment.dueAmount,1,'COMMA',2,'POINT')}">0</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

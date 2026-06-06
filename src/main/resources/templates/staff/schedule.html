@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-staff :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">Event Schedule</h4>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex align-items-center gap-3" th:each="e : ${events}">
+                <div class="text-center px-3 py-2 rounded" style="background:#e3f2fd;min-width:80px;">
+                    <div class="fw-bold" th:text="${#temporals.format(e.eventDate,'dd')}">01</div>
+                    <small th:text="${#temporals.format(e.eventDate,'MMM yyyy')}">Jan</small>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="fw-semibold" th:text="${e.category != null ? e.category.name : 'Event'}">Event</div>
+                    <small class="text-muted"><i class="bi bi-geo-alt me-1"></i><span th:text="${e.venue}">venue</span>
+                        <span th:if="${e.eventTime}"> · <i class="bi bi-clock me-1"></i><span th:text="${e.eventTime}"></span></span></small>
+                </div>
+                <span class="badge bg-secondary" th:text="${e.status.label}">Status</span>
+            </li>
+            <li class="list-group-item text-center text-muted" th:if="${#lists.isEmpty(events)}">No scheduled events</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

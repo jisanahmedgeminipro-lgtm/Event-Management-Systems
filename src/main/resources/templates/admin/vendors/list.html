@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-admin :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">Vendor Management</h4>
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header" th:text="${vendorForm.id} != null ? 'Edit Vendor' : 'Add Vendor'">Add</div>
+                <div class="card-body">
+                    <form th:action="@{/admin/vendors/save}" th:object="${vendorForm}" method="post">
+                        <input type="hidden" th:field="*{id}">
+                        <div class="mb-3">
+                            <label class="form-label">Vendor Name</label>
+                            <input class="form-control" th:field="*{name}" th:errorclass="is-invalid">
+                            <div class="invalid-feedback" th:errors="*{name}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" th:field="*{category}">
+                                <option th:each="c : ${categories}" th:value="${c}" th:text="${c.label}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contact Person</label>
+                            <input class="form-control" th:field="*{contactPerson}">
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6"><label class="form-label">Phone</label><input class="form-control" th:field="*{phone}"></div>
+                            <div class="col-6"><label class="form-label">Email</label><input class="form-control" th:field="*{email}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input class="form-control" th:field="*{address}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Service Details</label>
+                            <textarea class="form-control" rows="2" th:field="*{serviceDetails}"></textarea>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" th:field="*{active}" id="venActive">
+                            <label class="form-check-label" for="venActive">Active</label>
+                        </div>
+                        <button class="btn btn-purple w-100">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead><tr><th>Name</th><th>Category</th><th>Contact</th><th>Phone</th><th>Status</th><th></th></tr></thead>
+                        <tbody>
+                        <tr th:each="v : ${vendors}">
+                            <td class="fw-semibold" th:text="${v.name}">Name</td>
+                            <td><span class="badge bg-light text-dark" th:text="${v.category.label}">Cat</span></td>
+                            <td th:text="${v.contactPerson} ?: '-'">contact</td>
+                            <td th:text="${v.phone} ?: '-'">phone</td>
+                            <td><span class="badge" th:classappend="${v.active}?'bg-success':'bg-secondary'" th:text="${v.active}?'Active':'Inactive'"></span></td>
+                            <td class="text-nowrap">
+                                <a th:href="@{'/admin/vendors/' + ${v.id} + '/edit'}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                                <form th:action="@{'/admin/vendors/' + ${v.id} + '/delete'}" method="post" class="d-inline" onsubmit="return confirm('Delete?');">
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(vendors)}"><td colspan="6" class="text-center text-muted py-4">No vendors yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

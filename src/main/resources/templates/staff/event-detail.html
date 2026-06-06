@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-staff :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="mb-0">Event <span class="text-info" th:text="${booking.bookingReference}">REF</span></h4>
+        <a th:href="@{/staff/events}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+    </div>
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-header">Event Details</div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Event Type</dt><dd class="col-sm-8" th:text="${booking.category != null ? booking.category.name : '-'}">-</dd>
+                        <dt class="col-sm-4">Date / Time</dt><dd class="col-sm-8"><span th:text="${#temporals.format(booking.eventDate,'dd MMM yyyy')}"></span> <span th:if="${booking.eventTime}" th:text="${booking.eventTime}"></span></dd>
+                        <dt class="col-sm-4">Venue</dt><dd class="col-sm-8" th:text="${booking.venue}">-</dd>
+                        <dt class="col-sm-4">Guests</dt><dd class="col-sm-8" th:text="${booking.guestCount}">-</dd>
+                        <dt class="col-sm-4">Package</dt><dd class="col-sm-8" th:text="${booking.eventPackage != null ? booking.eventPackage.name : 'Custom'}">-</dd>
+                        <dt class="col-sm-4">Requirements</dt><dd class="col-sm-8" th:text="${booking.specialRequirements} ?: '-'">-</dd>
+                        <dt class="col-sm-4">Status</dt><dd class="col-sm-8"><span class="badge bg-secondary" th:text="${booking.status.label}">Status</span></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header">Customizations</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between" th:each="c : ${booking.customizations}">
+                        <span th:text="${c.item.name}">Item</span>
+                        <span class="badge bg-light text-dark" th:text="${c.item.type.label}">Type</span>
+                    </li>
+                    <li class="list-group-item text-center text-muted" th:if="${#lists.isEmpty(booking.customizations)}">No customizations</li>
+                </ul>
+            </div>
+            <div class="card mt-4">
+                <div class="card-header">Team Assigned</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:each="s : ${booking.assignedStaff}" th:text="${s.user.fullName} + ' — ' + ${s.position}">Staff</li>
+                    <li class="list-group-item text-center text-muted" th:if="${#lists.isEmpty(booking.assignedStaff)}">No team listed</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

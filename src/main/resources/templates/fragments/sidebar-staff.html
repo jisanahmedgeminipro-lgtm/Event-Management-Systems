@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside th:fragment="sidebar" class="dash-sidebar dash-sidebar-staff" id="dashSidebar">
+    <div class="sidebar-brand">
+        <i class="bi bi-gem text-info"></i>
+        <div>
+            <div class="brand-title">Shrabon</div>
+            <div class="brand-sub">Staff Portal</div>
+        </div>
+    </div>
+    <div class="sidebar-role">STAFF MEMBER</div>
+    <nav class="sidebar-nav">
+        <a th:href="@{/staff/dashboard}" th:classappend="${active=='dashboard'}?'active'"><i class="bi bi-speedometer2"></i>Dashboard</a>
+        <a th:href="@{/staff/events}" th:classappend="${active=='events'}?'active'"><i class="bi bi-calendar-event"></i>Assigned Events</a>
+        <a th:href="@{/staff/tasks}" th:classappend="${active=='tasks'}?'active'"><i class="bi bi-list-task"></i>Assigned Tasks</a>
+        <a th:href="@{/staff/schedule}" th:classappend="${active=='schedule'}?'active'"><i class="bi bi-calendar3"></i>Event Schedule</a>
+        <a th:href="@{/staff/notifications}" th:classappend="${active=='notifications'}?'active'"><i class="bi bi-bell"></i>Notifications</a>
+    </nav>
+</aside>
+</body>
+</html>

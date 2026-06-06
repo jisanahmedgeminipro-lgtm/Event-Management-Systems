@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${pkg.name})}"></head>
+<body>
+<nav th:replace="~{fragments/public-navbar :: navbar('packages')}"></nav>
+
+<section class="section" style="padding-top:130px;">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <div id="pkgCarousel" class="carousel slide rounded-4 overflow-hidden shadow" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active" th:if="${#lists.isEmpty(pkg.images)}">
+                            <img th:src="'https://picsum.photos/seed/pkg' + ${pkg.id} + '/900/560'" class="d-block w-100" style="height:420px;object-fit:cover;" alt="">
+                        </div>
+                        <div class="carousel-item" th:each="img,iStat : ${pkg.images}" th:classappend="${iStat.first}?'active'">
+                            <img th:src="${img.imageUrl}" class="d-block w-100" style="height:420px;object-fit:cover;" alt="">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#pkgCarousel" data-bs-slide="prev" th:if="${pkg.images.size() > 1}">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#pkgCarousel" data-bs-slide="next" th:if="${pkg.images.size() > 1}">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <span class="badge bg-primary-purple mb-2" th:if="${pkg.category}" th:text="${pkg.category.name}">Category</span>
+                <h2 th:text="${pkg.name}">Package</h2>
+                <div class="d-flex align-items-end gap-2 my-3">
+                    <span class="price-tag" th:text="'৳ ' + ${#numbers.formatDecimal(pkg.finalPrice,1,'COMMA',2,'POINT')}">৳0</span>
+                    <span class="old-price" th:if="${pkg.discountPercent != null and pkg.discountPercent.signum() > 0}"
+                          th:text="'৳ ' + ${#numbers.formatDecimal(pkg.basePrice,1,'COMMA',2,'POINT')}">৳0</span>
+                    <span class="badge bg-danger" th:if="${pkg.discountPercent != null and pkg.discountPercent.signum() > 0}"
+                          th:text="${pkg.discountPercent} + '% OFF'">OFF</span>
+                </div>
+                <p class="text-muted" th:text="${pkg.description}">Description</p>
+
+                <h6 class="mt-4">What's Included</h6>
+                <div class="row row-cols-2 g-2 small">
+                    <div class="col" th:if="${pkg.decoration}"><i class="bi bi-check-circle-fill text-success me-1"></i>Decoration</div>
+                    <div class="col" th:if="${pkg.catering}"><i class="bi bi-check-circle-fill text-success me-1"></i>Catering</div>
+                    <div class="col" th:if="${pkg.photography}"><i class="bi bi-check-circle-fill text-success me-1"></i>Photography</div>
+                    <div class="col" th:if="${pkg.videography}"><i class="bi bi-check-circle-fill text-success me-1"></i>Videography</div>
+                    <div class="col" th:if="${pkg.lighting}"><i class="bi bi-check-circle-fill text-success me-1"></i>Lighting</div>
+                    <div class="col" th:if="${pkg.soundSystem}"><i class="bi bi-check-circle-fill text-success me-1"></i>Sound System</div>
+                    <div class="col" th:if="${pkg.stageSetup}"><i class="bi bi-check-circle-fill text-success me-1"></i>Stage Setup</div>
+                    <div class="col"><i class="bi bi-people-fill text-primary me-1"></i><span th:text="${pkg.guestCapacity}">0</span> guests</div>
+                </div>
+
+                <h6 class="mt-4" th:if="${not #lists.isEmpty(pkg.features)}">Features</h6>
+                <ul class="text-muted small" th:if="${not #lists.isEmpty(pkg.features)}">
+                    <li th:each="f : ${pkg.features}" th:text="${f}">feature</li>
+                </ul>
+
+                <div class="d-grid gap-2 mt-4">
+                    <a th:href="@{'/booking'(packageId=${pkg.id})}" class="btn btn-accent btn-lg"><i class="bi bi-calendar-plus me-2"></i>Book This Package</a>
+                    <a th:href="@{/packages}" class="btn btn-outline-secondary">Back to Packages</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

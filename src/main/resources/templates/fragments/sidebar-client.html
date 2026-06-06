@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside th:fragment="sidebar" class="dash-sidebar dash-sidebar-client" id="dashSidebar">
+    <div class="sidebar-brand">
+        <i class="bi bi-gem text-success"></i>
+        <div>
+            <div class="brand-title">Shrabon</div>
+            <div class="brand-sub">Client Portal</div>
+        </div>
+    </div>
+    <div class="sidebar-role">CLIENT</div>
+    <nav class="sidebar-nav">
+        <a th:href="@{/client/dashboard}" th:classappend="${active=='dashboard'}?'active'"><i class="bi bi-speedometer2"></i>Dashboard</a>
+        <a th:href="@{/client/packages}" th:classappend="${active=='packages'}?'active'"><i class="bi bi-box-seam"></i>View Packages</a>
+        <a th:href="@{/client/customize}" th:classappend="${active=='customize'}?'active'"><i class="bi bi-sliders"></i>Customize &amp; Book</a>
+        <a th:href="@{/client/bookings}" th:classappend="${active=='bookings'}?'active'"><i class="bi bi-calendar-check"></i>My Bookings</a>
+        <a th:href="@{/client/payments}" th:classappend="${active=='payments'}?'active'"><i class="bi bi-cash-coin"></i>Payment Status</a>
+        <a th:href="@{/client/reviews}" th:classappend="${active=='reviews'}?'active'"><i class="bi bi-star"></i>My Reviews</a>
+        <a th:href="@{/client/profile}" th:classappend="${active=='profile'}?'active'"><i class="bi bi-person-gear"></i>Profile</a>
+    </nav>
+</aside>
+</body>
+</html>

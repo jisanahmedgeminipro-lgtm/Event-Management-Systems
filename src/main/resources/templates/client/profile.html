@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-client :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">My Profile</h4>
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <span class="avatar-circle mx-auto mb-2" style="width:80px;height:80px;font-size:2rem;background:#1b5e20;"><i class="bi bi-person-fill"></i></span>
+                    <h5 th:text="${client.user.fullName}">Name</h5>
+                    <p class="text-muted small mb-0" th:text="${client.user.email}">email</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">Edit Profile</div>
+                <div class="card-body">
+                    <form th:action="@{/client/profile}" th:object="${profileForm}" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Full Name</label>
+                                <input class="form-control" th:field="*{fullName}" th:errorclass="is-invalid">
+                                <div class="invalid-feedback" th:errors="*{fullName}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input class="form-control" th:field="*{phone}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">City</label>
+                                <input class="form-control" th:field="*{city}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">NID</label>
+                                <input class="form-control" th:field="*{nid}">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Address</label>
+                                <input class="form-control" th:field="*{address}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">New Password <small class="text-muted">(leave blank to keep)</small></label>
+                                <input type="password" class="form-control" th:field="*{newPassword}">
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-success px-4"><i class="bi bi-save me-1"></i>Update Profile</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

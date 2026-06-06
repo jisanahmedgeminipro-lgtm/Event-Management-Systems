@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-client :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h4 class="mb-0">Welcome, <span th:text="${client.user.fullName}">Client</span></h4>
+            <small class="text-muted">Plan and track your events with Shrabon</small>
+        </div>
+        <a th:href="@{/client/customize}" class="btn btn-success btn-sm"><i class="bi bi-plus-lg me-1"></i>New Booking</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4 col-6"><div class="card kpi-card p-3 text-center"><div class="kpi-value text-success" th:text="${totalBookings}">0</div><div class="kpi-label">Total Bookings</div></div></div>
+        <div class="col-md-4 col-6"><div class="card kpi-card p-3 text-center"><div class="kpi-value text-primary" th:text="${upcoming}">0</div><div class="kpi-label">Upcoming Events</div></div></div>
+        <div class="col-md-4 col-12"><div class="card kpi-card p-3 text-center"><div class="kpi-value text-warning"><i class="bi bi-stars"></i></div><div class="kpi-label">Build a custom package anytime</div></div></div>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">My Recent Bookings <a th:href="@{/client/bookings}" class="small">View all</a></div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>Ref</th><th>Event</th><th>Date</th><th>Status</th><th>Total</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="b : ${bookings}" th:if="${bStat.index < 6}">
+                    <td th:text="${b.bookingReference}">REF</td>
+                    <td th:text="${b.category != null ? b.category.name : '-'}">Event</td>
+                    <td th:text="${#temporals.format(b.eventDate,'dd MMM yyyy')}">date</td>
+                    <td><span class="badge bg-secondary badge-status" th:text="${b.status.label}">Status</span></td>
+                    <td th:text="'৳' + ${#numbers.formatDecimal(b.totalAmount,1,'COMMA',0,'POINT')}">0</td>
+                    <td><a th:href="@{'/client/bookings/' + ${b.id}}" class="btn btn-sm btn-outline-success"><i class="bi bi-eye"></i></a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(bookings)}"><td colspan="6" class="text-center text-muted py-4">No bookings yet. <a th:href="@{/client/customize}">Create one!</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

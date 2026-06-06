@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-admin :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">Website Content Management</h4>
+    <div class="card">
+        <div class="card-body">
+            <p class="text-muted">Edit the text blocks displayed across the public website. Leave a field blank to use the default.</p>
+            <form th:action="@{/admin/content/save}" method="post">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Hero Headline</label>
+                    <input class="form-control" name="content_hero_title" th:value="${content['hero_title']}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Hero Subtitle</label>
+                    <textarea class="form-control" rows="2" name="content_hero_subtitle" th:text="${content['hero_subtitle']}"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">About — Company History</label>
+                    <textarea class="form-control" rows="3" name="content_about_history" th:text="${content['about_history']}"></textarea>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Mission</label>
+                        <textarea class="form-control" rows="3" name="content_mission" th:text="${content['mission']}"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Vision</label>
+                        <textarea class="form-control" rows="3" name="content_vision" th:text="${content['vision']}"></textarea>
+                    </div>
+                </div>
+                <div class="row g-3 mt-1">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Contact Phone</label>
+                        <input class="form-control" name="content_contact_phone" th:value="${content['contact_phone']}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Contact Email</label>
+                        <input class="form-control" name="content_contact_email" th:value="${content['contact_email']}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Contact Address</label>
+                        <input class="form-control" name="content_contact_address" th:value="${content['contact_address']}">
+                    </div>
+                </div>
+                <button class="btn btn-purple mt-4 px-4"><i class="bi bi-save me-1"></i>Save Content</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

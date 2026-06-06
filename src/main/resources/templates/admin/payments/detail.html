@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-admin :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="mb-0">Payment — <span class="text-purple" th:text="${booking.bookingReference}">REF</span></h4>
+        <div>
+            <a th:href="@{'/admin/payments/invoice/' + ${booking.id}}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-receipt me-1"></i>Invoice</a>
+            <a th:href="@{'/admin/bookings/' + ${booking.id}}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Booking</a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card mb-4">
+                <div class="card-header">Summary</div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between"><span>Client</span><span class="fw-semibold" th:text="${booking.client.user.fullName}">-</span></div>
+                    <div class="d-flex justify-content-between"><span>Total</span><span th:text="'৳' + ${#numbers.formatDecimal(payment.totalAmount,1,'COMMA',2,'POINT')}">0</span></div>
+                    <div class="d-flex justify-content-between text-success"><span>Paid</span><span th:text="'৳' + ${#numbers.formatDecimal(payment.paidAmount,1,'COMMA',2,'POINT')}">0</span></div>
+                    <div class="d-flex justify-content-between text-danger"><span>Due</span><span th:text="'৳' + ${#numbers.formatDecimal(payment.dueAmount,1,'COMMA',2,'POINT')}">0</span></div>
+                    <hr>
+                    <span class="badge w-100 py-2" th:classappend="${payment.status.name()=='PAID'}?'bg-success':(${payment.status.name()=='PARTIAL'}?'bg-info text-dark':'bg-warning text-dark')"
+                          th:text="${payment.status.label}">Status</span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Record Payment</div>
+                <div class="card-body">
+                    <form th:action="@{/admin/payments/record}" th:object="${paymentForm}" method="post">
+                        <input type="hidden" th:field="*{bookingId}">
+                        <div class="mb-3">
+                            <label class="form-label">Amount (৳)</label>
+                            <input type="number" step="0.01" class="form-control" th:field="*{amount}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Method</label>
+                            <select class="form-select" th:field="*{method}">
+                                <option th:each="m : ${methods}" th:value="${m}" th:text="${m.label}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Reference No</label>
+                            <input class="form-control" th:field="*{referenceNo}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Note</label>
+                            <input class="form-control" th:field="*{note}">
+                        </div>
+                        <button class="btn btn-accent w-100"><i class="bi bi-cash me-1"></i>Add Payment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-header">Payment History</div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead><tr><th>Date</th><th>Amount</th><th>Method</th><th>Reference</th><th>Note</th></tr></thead>
+                        <tbody>
+                        <tr th:each="t : ${payment.transactions}">
+                            <td th:text="${#temporals.format(t.paidAt,'dd MMM yyyy HH:mm')}">date</td>
+                            <td class="fw-semibold" th:text="'৳' + ${#numbers.formatDecimal(t.amount,1,'COMMA',2,'POINT')}">0</td>
+                            <td th:text="${t.method.label}">method</td>
+                            <td th:text="${t.referenceNo} ?: '-'">ref</td>
+                            <td th:text="${t.note} ?: '-'">note</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(payment.transactions)}"><td colspan="5" class="text-center text-muted py-4">No payments recorded</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-admin :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">Event Types / Categories</h4>
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header" th:text="${categoryForm.id} != null ? 'Edit Event Type' : 'Add Event Type'">Add</div>
+                <div class="card-body">
+                    <form th:action="@{/admin/events/save}" th:object="${categoryForm}" method="post">
+                        <input type="hidden" th:field="*{id}">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input class="form-control" th:field="*{name}" th:errorclass="is-invalid">
+                            <div class="invalid-feedback" th:errors="*{name}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="3" th:field="*{description}"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Icon (Bootstrap Icon class)</label>
+                            <input class="form-control" th:field="*{icon}" placeholder="bi-heart">
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" th:field="*{active}" id="catActive">
+                            <label class="form-check-label" for="catActive">Active</label>
+                        </div>
+                        <button class="btn btn-purple w-100">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead><tr><th>Name</th><th>Description</th><th>Status</th><th></th></tr></thead>
+                        <tbody>
+                        <tr th:each="c : ${categories}">
+                            <td class="fw-semibold" th:text="${c.name}">Name</td>
+                            <td class="small text-muted" th:text="${#strings.abbreviate(c.description,60)}">desc</td>
+                            <td><span class="badge" th:classappend="${c.active}?'bg-success':'bg-secondary'" th:text="${c.active}?'Active':'Inactive'"></span></td>
+                            <td class="text-nowrap">
+                                <a th:href="@{'/admin/events/' + ${c.id} + '/edit'}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                                <form th:action="@{'/admin/events/' + ${c.id} + '/delete'}" method="post" class="d-inline" onsubmit="return confirm('Delete?');">
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(categories)}"><td colspan="4" class="text-center text-muted py-4">No event types</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

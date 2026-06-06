@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-admin :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">Booking Management</h4>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>Reference</th><th>Client</th><th>Event Type</th><th>Date</th><th>Venue</th><th>Guests</th><th>Total</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="b : ${bookings}">
+                    <td class="fw-semibold" th:text="${b.bookingReference}">REF</td>
+                    <td th:text="${b.client.user.fullName}">Client</td>
+                    <td th:text="${b.category != null ? b.category.name : '-'}">Type</td>
+                    <td th:text="${#temporals.format(b.eventDate,'dd MMM yyyy')}">date</td>
+                    <td th:text="${b.venue}">Venue</td>
+                    <td th:text="${b.guestCount}">0</td>
+                    <td th:text="'৳' + ${#numbers.formatDecimal(b.totalAmount,1,'COMMA',0,'POINT')}">0</td>
+                    <td>
+                        <span class="badge badge-status"
+                              th:classappend="${b.status.name() == 'PENDING'} ? 'bg-warning text-dark' :
+                                              (${b.status.name() == 'CONFIRMED'} ? 'bg-info text-dark' :
+                                              (${b.status.name() == 'IN_PROGRESS'} ? 'bg-primary' :
+                                              (${b.status.name() == 'COMPLETED'} ? 'bg-success' : 'bg-danger')))"
+                              th:text="${b.status.label}">Status</span>
+                    </td>
+                    <td><a th:href="@{'/admin/bookings/' + ${b.id}}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(bookings)}"><td colspan="9" class="text-center text-muted py-4">No bookings found</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

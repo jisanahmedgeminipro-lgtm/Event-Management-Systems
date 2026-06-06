@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-admin :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">Contact Messages</h4>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>Name</th><th>Email / Phone</th><th>Subject</th><th>Message</th><th>Received</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="m : ${messages}" th:classappend="${!m.handled}?'table-warning':''">
+                    <td class="fw-semibold" th:text="${m.name}">Name</td>
+                    <td class="small"><div th:text="${m.email}">email</div><div class="text-muted" th:text="${m.phone}">phone</div></td>
+                    <td th:text="${m.subject} ?: '-'">subject</td>
+                    <td class="small text-muted" style="max-width:280px;" th:text="${m.message}">message</td>
+                    <td class="small" th:text="${#temporals.format(m.createdAt,'dd MMM yyyy HH:mm')}">date</td>
+                    <td><span class="badge" th:classappend="${m.handled}?'bg-success':'bg-warning text-dark'" th:text="${m.handled}?'Handled':'New'"></span></td>
+                    <td class="text-nowrap">
+                        <form th:if="${!m.handled}" th:action="@{'/admin/messages/' + ${m.id} + '/handled'}" method="post" class="d-inline">
+                            <button class="btn btn-sm btn-outline-success"><i class="bi bi-check2"></i></button>
+                        </form>
+                        <form th:action="@{'/admin/messages/' + ${m.id} + '/delete'}" method="post" class="d-inline" onsubmit="return confirm('Delete?');">
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(messages)}"><td colspan="7" class="text-center text-muted py-4">No messages</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

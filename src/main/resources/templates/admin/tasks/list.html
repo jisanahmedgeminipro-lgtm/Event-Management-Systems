@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-admin :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="mb-0">Task Management</h4>
+        <a th:href="@{/admin/staff}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-people me-1"></i>Staff</a>
+    </div>
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header" th:text="${taskForm.id} != null ? 'Edit Task' : 'Create Task'">Create</div>
+                <div class="card-body">
+                    <form th:action="@{/admin/tasks/save}" th:object="${taskForm}" method="post">
+                        <input type="hidden" th:field="*{id}">
+                        <div class="mb-3">
+                            <label class="form-label">Title</label>
+                            <input class="form-control" th:field="*{title}" th:errorclass="is-invalid">
+                            <div class="invalid-feedback" th:errors="*{title}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="2" th:field="*{description}"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Assign to Staff</label>
+                            <select class="form-select" th:field="*{assignedStaffId}">
+                                <option value="">-- Unassigned --</option>
+                                <option th:each="s : ${staffList}" th:value="${s.id}" th:text="${s.user.fullName}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Related Booking</label>
+                            <select class="form-select" th:field="*{bookingId}">
+                                <option value="">-- None --</option>
+                                <option th:each="b : ${bookings}" th:value="${b.id}" th:text="${b.bookingReference} + ' - ' + ${b.venue}"></option>
+                            </select>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label">Deadline</label>
+                                <input type="date" class="form-control" th:field="*{deadline}">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Priority</label>
+                                <select class="form-select" th:field="*{priority}">
+                                    <option th:each="p : ${priorities}" th:value="${p}" th:text="${p.label}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" th:field="*{status}">
+                                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s.label}"></option>
+                            </select>
+                        </div>
+                        <button class="btn btn-purple w-100">Save Task</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead><tr><th>Title</th><th>Assignee</th><th>Deadline</th><th>Priority</th><th>Status</th><th></th></tr></thead>
+                        <tbody>
+                        <tr th:each="t : ${tasks}">
+                            <td class="fw-semibold" th:text="${t.title}">Title</td>
+                            <td th:text="${t.assignedStaff != null ? t.assignedStaff.user.fullName : 'Unassigned'}">Staff</td>
+                            <td class="small" th:text="${t.deadline != null ? #temporals.format(t.deadline,'dd MMM yyyy') : '-'}">date</td>
+                            <td><span class="badge" th:classappend="${t.priority.name()=='HIGH'}?'bg-danger':(${t.priority.name()=='MEDIUM'}?'bg-warning text-dark':'bg-secondary')" th:text="${t.priority.label}">P</span></td>
+                            <td><span class="badge" th:classappend="${t.status.name()=='COMPLETED'}?'bg-success':(${t.status.name()=='IN_PROGRESS'}?'bg-info text-dark':'bg-secondary')" th:text="${t.status.label}">S</span></td>
+                            <td class="text-nowrap">
+                                <a th:href="@{'/admin/tasks/' + ${t.id} + '/edit'}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                                <form th:action="@{'/admin/tasks/' + ${t.id} + '/delete'}" method="post" class="d-inline" onsubmit="return confirm('Delete?');">
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(tasks)}"><td colspan="6" class="text-center text-muted py-4">No tasks</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

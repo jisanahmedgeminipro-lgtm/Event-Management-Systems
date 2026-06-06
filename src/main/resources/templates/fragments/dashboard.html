@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" th:fragment="page(sidebar, content)"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head(${pageTitle})}"></head>
+<body class="dash-body">
+<div class="dash-wrapper">
+    <!-- Sidebar (role-specific fragment passed in) -->
+    <aside class="dash-sidebar" id="dashSidebar" th:replace="${sidebar}"></aside>
+
+    <!-- Main -->
+    <div class="dash-main">
+        <header class="dash-topbar" th:replace="~{fragments/topbar :: topbar}"></header>
+        <main class="dash-content">
+            <div th:replace="~{fragments/alerts :: alerts}"></div>
+            <div th:replace="${content}"></div>
+        </main>
+    </div>
+</div>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

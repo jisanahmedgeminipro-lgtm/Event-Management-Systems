@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-staff :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">Notifications</h4>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex align-items-start gap-3" th:each="t : ${tasks}" th:if="${t.status.name() != 'COMPLETED'}">
+                <i class="bi bi-list-task text-warning fs-5"></i>
+                <div>
+                    <div>New / pending task: <strong th:text="${t.title}">Task</strong></div>
+                    <small class="text-muted" th:text="${t.deadline != null ? 'Deadline: ' + #temporals.format(t.deadline,'dd MMM yyyy') : 'No deadline'}">deadline</small>
+                </div>
+            </li>
+            <li class="list-group-item d-flex align-items-start gap-3" th:each="e : ${events}" th:if="${eStat.index < 5}">
+                <i class="bi bi-calendar-event text-info fs-5"></i>
+                <div>
+                    <div>Assigned event: <strong th:text="${e.category != null ? e.category.name : 'Event'}">Event</strong> at <span th:text="${e.venue}">venue</span></div>
+                    <small class="text-muted" th:text="${#temporals.format(e.eventDate,'dd MMM yyyy')}">date</small>
+                </div>
+            </li>
+            <li class="list-group-item text-center text-muted" th:if="${#lists.isEmpty(tasks) and #lists.isEmpty(events)}">You're all caught up!</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

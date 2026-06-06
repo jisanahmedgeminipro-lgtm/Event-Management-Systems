@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside th:fragment="sidebar" class="dash-sidebar" id="dashSidebar">
+    <div class="sidebar-brand">
+        <i class="bi bi-gem text-warning"></i>
+        <div>
+            <div class="brand-title">Shrabon</div>
+            <div class="brand-sub">Admin Panel</div>
+        </div>
+    </div>
+    <div class="sidebar-role">ADMINISTRATOR</div>
+    <nav class="sidebar-nav">
+        <a th:href="@{/admin/dashboard}" th:classappend="${active=='dashboard'}?'active'"><i class="bi bi-speedometer2"></i>Dashboard</a>
+        <a th:href="@{/admin/bookings}" th:classappend="${active=='bookings'}?'active'"><i class="bi bi-calendar-check"></i>Booking Management</a>
+        <a th:href="@{/admin/packages}" th:classappend="${active=='packages'}?'active'"><i class="bi bi-box-seam"></i>Package Management</a>
+        <a th:href="@{/admin/customizations}"><i class="bi bi-sliders"></i>Customization Items</a>
+        <a th:href="@{/admin/events}" th:classappend="${active=='events'}?'active'"><i class="bi bi-tags"></i>Event Types</a>
+        <a th:href="@{/admin/clients}" th:classappend="${active=='clients'}?'active'"><i class="bi bi-people"></i>Client Management</a>
+        <a th:href="@{/admin/staff}" th:classappend="${active=='staff'}?'active'"><i class="bi bi-person-badge"></i>Staff &amp; Tasks</a>
+        <a th:href="@{/admin/vendors}" th:classappend="${active=='vendors'}?'active'"><i class="bi bi-truck"></i>Vendor Management</a>
+        <a th:href="@{/admin/payments}" th:classappend="${active=='payments'}?'active'"><i class="bi bi-cash-coin"></i>Payment Management</a>
+        <a th:href="@{/admin/reports}" th:classappend="${active=='reports'}?'active'"><i class="bi bi-graph-up"></i>Reports</a>
+        <a th:href="@{/admin/reviews}" th:classappend="${active=='reviews'}?'active'"><i class="bi bi-star"></i>Reviews</a>
+        <a th:href="@{/admin/messages}" th:classappend="${active=='messages'}?'active'"><i class="bi bi-envelope"></i>Contact Messages</a>
+        <a th:href="@{/admin/gallery}" th:classappend="${active=='gallery'}?'active'"><i class="bi bi-images"></i>Gallery Management</a>
+        <a th:href="@{/admin/content}" th:classappend="${active=='content'}?'active'"><i class="bi bi-file-earmark-text"></i>Website Content</a>
+    </nav>
+</aside>
+</body>
+</html>

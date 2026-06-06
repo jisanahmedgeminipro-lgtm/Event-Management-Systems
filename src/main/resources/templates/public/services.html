@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Services')}"></head>
+<body>
+<nav th:replace="~{fragments/public-navbar :: navbar('services')}"></nav>
+
+<section class="section" style="padding-top:130px;">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-subtitle">Complete, end-to-end event solutions under one roof</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4 col-sm-6" th:each="svc : ${ {'Decoration & Theme Design','Catering & Food','Photography','Videography','Stage Setup','Lighting Solutions','Sound System','Guest Management','Transport & Logistics'} }">
+                <div class="feature-card p-4 h-100 text-center">
+                    <div class="icon-circle"><i class="bi bi-check2-circle"></i></div>
+                    <h5 th:text="${svc}">Service</h5>
+                    <p class="text-muted small mb-0">Professional, customisable and budget-friendly solutions handled by our expert team.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="background:var(--light-bg);">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">Event Categories We Cover</h2>
+            <p class="section-subtitle">Admin-managed, ever-growing list of event types</p>
+        </div>
+        <div class="row g-3">
+            <div class="col-lg-3 col-md-4 col-6" th:each="cat : ${categories}">
+                <div class="card feature-card p-3 text-center">
+                    <h6 class="mb-1"><i class="bi bi-stars text-gold me-1"></i><span th:text="${cat.name}">Event</span></h6>
+                    <p class="small text-muted mb-0" th:text="${#strings.abbreviate(cat.description,70)}">desc</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5">
+            <a th:href="@{/packages}" class="btn btn-purple btn-lg">Browse Our Packages</a>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

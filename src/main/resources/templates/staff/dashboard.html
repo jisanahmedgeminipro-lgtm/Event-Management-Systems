@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-staff :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="mb-4">
+        <h4 class="mb-0">Staff Dashboard</h4>
+        <small class="text-muted">Welcome, <span th:text="${currentUserName}">Staff</span> ·
+            <span th:text="${staff.position}">Position</span></small>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3 col-6"><div class="card kpi-card p-3 text-center"><div class="kpi-value text-info" th:text="${events.size()}">0</div><div class="kpi-label">Assigned Events</div></div></div>
+        <div class="col-md-3 col-6"><div class="card kpi-card p-3 text-center"><div class="kpi-value text-warning" th:text="${pendingTasks}">0</div><div class="kpi-label">Pending Tasks</div></div></div>
+        <div class="col-md-3 col-6"><div class="card kpi-card p-3 text-center"><div class="kpi-value text-primary" th:text="${inProgressTasks}">0</div><div class="kpi-label">In Progress</div></div></div>
+        <div class="col-md-3 col-6"><div class="card kpi-card p-3 text-center"><div class="kpi-value text-success" th:text="${completedTasks}">0</div><div class="kpi-label">Completed</div></div></div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">My Events <a th:href="@{/staff/events}" class="small">All</a></div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" th:each="e : ${events}" th:if="${eStat.index < 6}">
+                        <div>
+                            <div class="fw-semibold" th:text="${e.category != null ? e.category.name : 'Event'}">Event</div>
+                            <small class="text-muted"><i class="bi bi-geo-alt me-1"></i><span th:text="${e.venue}">venue</span></small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-secondary badge-status" th:text="${e.status.label}">Status</span><br>
+                            <small class="text-muted" th:text="${#temporals.format(e.eventDate,'dd MMM yyyy')}">date</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item text-center text-muted" th:if="${#lists.isEmpty(events)}">No assigned events</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">My Tasks <a th:href="@{/staff/tasks}" class="small">All</a></div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" th:each="t : ${tasks}" th:if="${tStat.index < 6}">
+                        <span th:text="${t.title}">Task</span>
+                        <span class="badge" th:classappend="${t.status.name()=='COMPLETED'}?'bg-success':(${t.status.name()=='IN_PROGRESS'}?'bg-info text-dark':'bg-secondary')" th:text="${t.status.label}">S</span>
+                    </li>
+                    <li class="list-group-item text-center text-muted" th:if="${#lists.isEmpty(tasks)}">No tasks assigned</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

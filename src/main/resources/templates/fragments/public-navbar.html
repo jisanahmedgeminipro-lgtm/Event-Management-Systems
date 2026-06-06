@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<nav th:fragment="navbar(active)" class="navbar navbar-expand-lg navbar-dark fixed-top public-navbar">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/}">
+            <i class="bi bi-gem me-1 text-warning"></i><span>Shrabon</span> Events
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item"><a class="nav-link" th:classappend="${active=='home'}?'active'" th:href="@{/}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" th:classappend="${active=='about'}?'active'" th:href="@{/about}">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" th:classappend="${active=='services'}?'active'" th:href="@{/services}">Services</a></li>
+                <li class="nav-item"><a class="nav-link" th:classappend="${active=='packages'}?'active'" th:href="@{/packages}">Packages</a></li>
+                <li class="nav-item"><a class="nav-link" th:classappend="${active=='gallery'}?'active'" th:href="@{/gallery}">Gallery</a></li>
+                <li class="nav-item"><a class="nav-link" th:classappend="${active=='reviews'}?'active'" th:href="@{/reviews}">Reviews</a></li>
+                <li class="nav-item"><a class="nav-link" th:classappend="${active=='contact'}?'active'" th:href="@{/contact}">Contact</a></li>
+
+                <li class="nav-item ms-lg-3" sec:authorize="isAnonymous()">
+                    <a class="btn btn-outline-light btn-sm" th:href="@{/login}">Login</a>
+                </li>
+                <li class="nav-item ms-lg-2" sec:authorize="isAnonymous()">
+                    <a class="btn btn-warning btn-sm fw-semibold" th:href="@{/register}">Register</a>
+                </li>
+
+                <li class="nav-item dropdown ms-lg-3" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle text-warning fw-semibold" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle me-1"></i><span th:text="${currentUserName}">Account</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/dashboard}">Admin Dashboard</a></li>
+                        <li sec:authorize="hasRole('STAFF')"><a class="dropdown-item" th:href="@{/staff/dashboard}">Staff Dashboard</a></li>
+                        <li sec:authorize="hasRole('CLIENT')"><a class="dropdown-item" th:href="@{/client/dashboard}">My Dashboard</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post" class="px-2">
+                                <button class="btn btn-sm btn-danger w-100" type="submit">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

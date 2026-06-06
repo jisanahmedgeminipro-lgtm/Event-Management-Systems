@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-client :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">My Reviews</h4>
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header">Write a Review</div>
+                <div class="card-body">
+                    <form th:action="@{/client/reviews}" th:object="${reviewForm}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Related Booking (optional)</label>
+                            <select class="form-select" th:field="*{bookingId}">
+                                <option value="">-- General --</option>
+                                <option th:each="b : ${bookings}" th:value="${b.id}" th:text="${b.bookingReference} + ' - ' + ${b.venue}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label d-block">Rating</label>
+                            <div class="rating-input fs-4">
+                                <th:block th:each="i : ${#numbers.sequence(1,5)}">
+                                    <input type="radio" class="btn-check" th:field="*{rating}" th:value="${i}" th:id="'star' + ${i}">
+                                    <label class="text-warning" th:for="'star' + ${i}" style="cursor:pointer;"><i class="bi bi-star-fill"></i></label>
+                                </th:block>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Comment</label>
+                            <textarea class="form-control" rows="3" th:field="*{comment}"></textarea>
+                        </div>
+                        <button class="btn btn-success w-100">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-header">My Submitted Reviews</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:each="r : ${reviews}">
+                        <div class="d-flex justify-content-between">
+                            <span class="stars">
+                                <i class="bi" th:each="i : ${#numbers.sequence(1,5)}" th:classappend="${i <= r.rating}?'bi-star-fill':'bi-star'"></i>
+                            </span>
+                            <span class="badge" th:classappend="${r.approved}?'bg-success':'bg-warning text-dark'" th:text="${r.approved}?'Published':'Pending'"></span>
+                        </div>
+                        <p class="mb-1 mt-1 text-muted" th:text="${r.comment}">comment</p>
+                        <small class="text-muted" th:text="${#temporals.format(r.createdAt,'dd MMM yyyy')}">date</small>
+                    </li>
+                    <li class="list-group-item text-center text-muted" th:if="${#lists.isEmpty(reviews)}">No reviews yet</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

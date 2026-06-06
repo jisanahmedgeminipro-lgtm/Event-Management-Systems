@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-admin :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">Reviews Moderation</h4>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>Client</th><th>Rating</th><th>Comment</th><th>Date</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="r : ${reviews}">
+                    <td class="fw-semibold" th:text="${r.client.user.fullName}">Client</td>
+                    <td class="stars text-nowrap">
+                        <i class="bi" th:each="i : ${#numbers.sequence(1,5)}" th:classappend="${i <= r.rating}?'bi-star-fill':'bi-star'"></i>
+                    </td>
+                    <td class="small text-muted" th:text="${r.comment}">comment</td>
+                    <td class="small" th:text="${#temporals.format(r.createdAt,'dd MMM yyyy')}">date</td>
+                    <td><span class="badge" th:classappend="${r.approved}?'bg-success':'bg-warning text-dark'" th:text="${r.approved}?'Published':'Pending'"></span></td>
+                    <td class="text-nowrap">
+                        <form th:if="${!r.approved}" th:action="@{'/admin/reviews/' + ${r.id} + '/approve'}" method="post" class="d-inline">
+                            <button class="btn btn-sm btn-outline-success"><i class="bi bi-check2"></i></button>
+                        </form>
+                        <form th:if="${r.approved}" th:action="@{'/admin/reviews/' + ${r.id} + '/unapprove'}" method="post" class="d-inline">
+                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye-slash"></i></button>
+                        </form>
+                        <form th:action="@{'/admin/reviews/' + ${r.id} + '/delete'}" method="post" class="d-inline" onsubmit="return confirm('Delete review?');">
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(reviews)}"><td colspan="6" class="text-center text-muted py-4">No reviews</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

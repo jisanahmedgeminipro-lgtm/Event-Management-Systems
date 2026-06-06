@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-admin :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="mb-0">Package Management</h4>
+        <a th:href="@{/admin/packages/new}" class="btn btn-purple btn-sm"><i class="bi bi-plus-lg me-1"></i>New Package</a>
+    </div>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>Name</th><th>Category</th><th>Base Price</th><th>Discount</th><th>Final</th><th>Capacity</th><th>Featured</th><th>Active</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="p : ${packages}">
+                    <td class="fw-semibold" th:text="${p.name}">Name</td>
+                    <td th:text="${p.category != null ? p.category.name : '-'}">Cat</td>
+                    <td th:text="'৳' + ${#numbers.formatDecimal(p.basePrice,1,'COMMA',0,'POINT')}">0</td>
+                    <td th:text="${p.discountPercent} + '%'">0%</td>
+                    <td class="fw-semibold text-purple" th:text="'৳' + ${#numbers.formatDecimal(p.finalPrice,1,'COMMA',0,'POINT')}">0</td>
+                    <td th:text="${p.guestCapacity}">0</td>
+                    <td><i class="bi" th:classappend="${p.featured}?'bi-star-fill text-warning':'bi-star text-muted'"></i></td>
+                    <td><span class="badge" th:classappend="${p.active}?'bg-success':'bg-secondary'" th:text="${p.active}?'Active':'Inactive'"></span></td>
+                    <td class="text-nowrap">
+                        <a th:href="@{'/admin/packages/' + ${p.id} + '/edit'}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                        <form th:action="@{'/admin/packages/' + ${p.id} + '/delete'}" method="post" class="d-inline" onsubmit="return confirm('Delete this package?');">
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(packages)}"><td colspan="9" class="text-center text-muted py-4">No packages yet</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

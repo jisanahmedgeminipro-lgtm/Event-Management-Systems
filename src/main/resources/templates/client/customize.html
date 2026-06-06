@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-client :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-1">Custom Package Builder</h4>
+    <p class="text-muted">Choose a base package, add extras and book your event. The price updates automatically.</p>
+
+    <div th:if="${error}" class="alert alert-danger"><i class="bi bi-exclamation-triangle me-1"></i><span th:text="${error}"></span></div>
+
+    <form th:action="@{/client/booking}" th:object="${bookingForm}" method="post">
+        <div class="row g-4">
+            <!-- LEFT: selections -->
+            <div class="col-lg-8">
+                <!-- Event details -->
+                <div class="card mb-4">
+                    <div class="card-header">Event Details</div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Base Package</label>
+                                <select class="form-select" id="packageId" th:field="*{packageId}">
+                                    <option value="">-- No package (fully custom) --</option>
+                                    <option th:each="p : ${packages}" th:value="${p.id}"
+                                            th:text="${p.name} + ' (৳' + ${#numbers.formatDecimal(p.basePrice,1,'COMMA',0,'POINT')} + ')'"
+                                            th:selected="${p.id == selectedPackageId}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Event Type</label>
+                                <select class="form-select" th:field="*{categoryId}" th:errorclass="is-invalid">
+                                    <option value="">-- Select --</option>
+                                    <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+                                </select>
+                                <div class="invalid-feedback" th:errors="*{categoryId}"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Event Date</label>
+                                <input type="date" class="form-control" th:field="*{eventDate}" th:errorclass="is-invalid">
+                                <div class="invalid-feedback" th:errors="*{eventDate}"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Event Time</label>
+                                <input type="time" class="form-control" th:field="*{eventTime}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Guest Count</label>
+                                <input type="number" class="form-control" th:field="*{guestCount}" th:errorclass="is-invalid">
+                                <div class="invalid-feedback" th:errors="*{guestCount}"></div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Venue</label>
+                                <input class="form-control" th:field="*{venue}" th:errorclass="is-invalid" placeholder="Venue name & address">
+                                <div class="invalid-feedback" th:errors="*{venue}"></div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Special Requirements</label>
+                                <textarea class="form-control" rows="2" th:field="*{specialRequirements}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customization catalog -->
+                <div class="card">
+                    <div class="card-header">Add Extras</div>
+                    <div class="card-body">
+                        <div th:if="${#maps.isEmpty(groupedItems)}" class="text-muted">No add-on items configured yet.</div>
+                        <div th:each="entry : ${groupedItems}" class="mb-3">
+                            <h6 class="text-uppercase small text-muted fw-bold" th:text="${entry.key.label}">Type</h6>
+                            <div class="builder-item d-flex align-items-center justify-content-between" th:each="item : ${entry.value}">
+                                <div class="form-check mb-0">
+                                    <input class="form-check-input builder-checkbox" type="checkbox"
+                                           th:field="*{customizationItemIds}" th:value="${item.id}" th:id="'item' + ${item.id}">
+                                    <label class="form-check-label builder-info" th:for="'item' + ${item.id}">
+                                        <span class="item-name" th:text="${item.name}">Item</span>
+                                        <small class="text-muted d-block" th:text="${item.description}">desc</small>
+                                    </label>
+                                </div>
+                                <span class="fw-semibold text-success">+ ৳<span th:text="${#numbers.formatDecimal(item.price,1,'COMMA',0,'POINT')}">0</span>
+                                    <small class="text-muted" th:text="'/' + ${item.unit}">/unit</small></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: live quote -->
+            <div class="col-lg-4">
+                <div class="card quote-box">
+                    <div class="card-header bg-success text-white">Price Summary</div>
+                    <div class="card-body">
+                        <div class="quote-row"><span>Base Price</span><span id="qBase">৳ 0.00</span></div>
+                        <div class="quote-row"><span>Additional</span><span id="qAdd">৳ 0.00</span></div>
+                        <div class="quote-row text-danger"><span>Discount</span><span id="qDiscount">- ৳ 0.00</span></div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="fw-semibold">Final Price</span>
+                            <span class="quote-total" id="qFinal">৳ 0.00</span>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 mt-4"><i class="bi bi-calendar-check me-1"></i>Confirm Booking</button>
+                        <p class="small text-muted mt-2 mb-0">Final price is auto-calculated. Payment is arranged after confirmation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            initBuilder([[@{/client/customize/quote}]], [[${_csrf.headerName}]], [[${_csrf.token}]]);
+        });
+    </script>
+</div>
+</body>
+</html>

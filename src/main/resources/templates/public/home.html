@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Home')}"></head>
+<body>
+<nav th:replace="~{fragments/public-navbar :: navbar('home')}"></nav>
+
+<!-- ===================== HERO / IMAGE SLIDER ===================== -->
+<header class="hero">
+    <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/wedding1/1920/1080');"></div>
+            </div>
+            <div class="carousel-item">
+                <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/stage2/1920/1080');"></div>
+            </div>
+            <div class="carousel-item">
+                <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/decor3/1920/1080');"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container hero-content text-center text-lg-start">
+        <div class="row">
+            <div class="col-lg-8">
+                <p class="text-warning text-uppercase fw-semibold mb-2" style="letter-spacing:3px;">Premium Event Management</p>
+                <h1 class="fw-bold mb-3">We Turn Your Moments<br>Into Unforgettable <span class="text-gold">Celebrations</span></h1>
+                <p class="lead mb-4">Weddings, corporate events, birthdays and cultural programs — beautifully decorated,
+                    flawlessly managed by Shrabon Decorator &amp; Event Management.</p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                    <a th:href="@{/packages}" class="btn btn-accent btn-lg px-4"><i class="bi bi-box-seam me-2"></i>Explore Packages</a>
+                    <a th:href="@{/booking}" class="btn btn-outline-light btn-lg px-4"><i class="bi bi-calendar-plus me-2"></i>Book an Event</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ===================== WHY CHOOSE US ===================== -->
+<section class="section">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">Why Choose Us</h2>
+            <p class="section-subtitle">Trusted by hundreds of families and businesses</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="why-box text-center">
+                    <div class="icon-circle"><i class="bi bi-award"></i></div>
+                    <h5>Experienced Team</h5>
+                    <p class="text-muted small mb-0">Years of expertise managing events of every scale and theme.</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="why-box text-center">
+                    <div class="icon-circle"><i class="bi bi-palette"></i></div>
+                    <h5>Creative Decoration</h5>
+                    <p class="text-muted small mb-0">Tailor-made décor that perfectly matches your vision.</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="why-box text-center">
+                    <div class="icon-circle"><i class="bi bi-cash-stack"></i></div>
+                    <h5>Transparent Pricing</h5>
+                    <p class="text-muted small mb-0">Build your own package and see the final price instantly.</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="why-box text-center">
+                    <div class="icon-circle"><i class="bi bi-clock-history"></i></div>
+                    <h5>On-time Delivery</h5>
+                    <p class="text-muted small mb-0">Punctual execution with a dedicated event coordinator.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== FEATURED PACKAGES ===================== -->
+<section class="section bg-white" style="background:var(--light-bg)!important;">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">Featured Packages</h2>
+            <p class="section-subtitle">Hand-picked packages loved by our customers</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6" th:each="pkg : ${featuredPackages}">
+                <div class="card package-card">
+                    <img class="card-img-top" th:src="${pkg.coverImage} ?: 'https://picsum.photos/seed/pkg' + ${pkg.id} + '/600/400'" alt="Package">
+                    <div class="card-body">
+                        <span class="badge bg-primary-purple mb-2" th:if="${pkg.category}" th:text="${pkg.category.name}">Category</span>
+                        <h5 class="card-title" th:text="${pkg.name}">Package</h5>
+                        <p class="text-muted small" th:text="${#strings.abbreviate(pkg.description,90)}">desc</p>
+                        <div class="d-flex align-items-end gap-2 mb-2">
+                            <span class="price-tag" th:text="'৳ ' + ${#numbers.formatDecimal(pkg.finalPrice,1,'COMMA',0,'POINT')}">৳0</span>
+                            <span class="old-price" th:if="${pkg.discountPercent != null and pkg.discountPercent.signum() > 0}"
+                                  th:text="'৳ ' + ${#numbers.formatDecimal(pkg.basePrice,1,'COMMA',0,'POINT')}">৳0</span>
+                        </div>
+                        <p class="small text-muted mb-3"><i class="bi bi-people me-1"></i><span th:text="${pkg.guestCapacity}">0</span> guests</p>
+                        <a th:href="@{'/packages/' + ${pkg.id}}" class="btn btn-purple w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 text-center text-muted" th:if="${#lists.isEmpty(featuredPackages)}">
+                <p>Featured packages will appear here soon.</p>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a th:href="@{/packages}" class="btn btn-outline-dark">View All Packages <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== STATISTICS ===================== -->
+<section class="section stats-section">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-3 col-6">
+                <div class="stat-card p-4">
+                    <div class="stat-number" data-count="" th:attr="data-count=${statBookings}">0</div>
+                    <div>Events Managed</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card p-4">
+                    <div class="stat-number" th:attr="data-count=${statClients}">0</div>
+                    <div>Happy Clients</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card p-4">
+                    <div class="stat-number" th:attr="data-count=${statStaff}">0</div>
+                    <div>Team Members</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card p-4">
+                    <div class="stat-number" th:attr="data-count=${statPackages}">0</div>
+                    <div>Packages Offered</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== SERVICES / EVENT TYPES ===================== -->
+<section class="section">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">Events We Specialize In</h2>
+            <p class="section-subtitle">From intimate gatherings to grand celebrations</p>
+        </div>
+        <div class="row g-3">
+            <div class="col-lg-3 col-md-4 col-6" th:each="cat : ${categories}">
+                <div class="feature-card text-center p-4">
+                    <i class="bi bi-stars icon-circle"></i>
+                    <h6 class="mb-1" th:text="${cat.name}">Event</h6>
+                    <p class="small text-muted mb-0" th:text="${#strings.abbreviate(cat.description,60)}">desc</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== UPCOMING / FEATURED EVENTS ===================== -->
+<section class="section" style="background:var(--light-bg);" th:if="${not #lists.isEmpty(upcomingEvents)}">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">Upcoming Events</h2>
+            <p class="section-subtitle">Celebrations we are preparing right now</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4" th:each="ev : ${upcomingEvents}" th:if="${evStat.index < 3}">
+                <div class="card feature-card p-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-circle mb-0"><i class="bi bi-calendar-event"></i></div>
+                        <div>
+                            <h6 class="mb-1" th:text="${ev.category != null ? ev.category.name : 'Event'}">Event</h6>
+                            <p class="small text-muted mb-0"><i class="bi bi-geo-alt me-1"></i><span th:text="${ev.venue}">Venue</span></p>
+                            <p class="small text-muted mb-0"><i class="bi bi-clock me-1"></i><span th:text="${#temporals.format(ev.eventDate,'dd MMM yyyy')}">Date</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== GALLERY PREVIEW ===================== -->
+<section class="section">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">Our Gallery</h2>
+            <p class="section-subtitle">A glimpse of the magic we create</p>
+        </div>
+        <div class="row g-3 gallery-grid">
+            <div class="col-lg-3 col-md-4 col-6" th:each="g : ${galleryItems}">
+                <img th:src="${g.imageUrl}" th:alt="${g.title}">
+            </div>
+            <div class="col-12 text-center text-muted" th:if="${#lists.isEmpty(galleryItems)}">
+                <p>Gallery images coming soon.</p>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a th:href="@{/gallery}" class="btn btn-outline-dark">View Full Gallery <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== REVIEWS ===================== -->
+<section class="section" style="background:var(--light-bg);">
+    <div class="container">
+        <div class="text-center">
+            <div class="divider-accent"></div>
+            <h2 class="section-title">What Our Clients Say</h2>
+            <p class="section-subtitle">
+                <span class="stars">
+                    <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1,5)}"
+                       th:classappend="${i <= avgRating} ? '' : 'bi-star'"></i>
+                </span>
+                <span class="ms-2" th:text="${#numbers.formatDecimal(avgRating,1,1)} + ' / 5 average rating'">5/5</span>
+            </p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4" th:each="r : ${reviews}" th:if="${rStat.index < 3}">
+                <div class="card review-card p-4">
+                    <div class="stars mb-2">
+                        <i class="bi" th:each="i : ${#numbers.sequence(1,5)}"
+                           th:classappend="${i <= r.rating} ? 'bi-star-fill' : 'bi-star'"></i>
+                    </div>
+                    <p class="text-muted fst-italic" th:text="${r.comment}">Great service!</p>
+                    <div class="fw-semibold" th:text="${r.client.user.fullName}">Client</div>
+                </div>
+            </div>
+            <div class="col-12 text-center text-muted" th:if="${#lists.isEmpty(reviews)}">
+                <p>Be the first to review our services!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== CONTACT CTA ===================== -->
+<section class="section text-center text-white" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));">
+    <div class="container">
+        <h2 class="fw-bold mb-3">Ready to Plan Your Dream Event?</h2>
+        <p class="lead mb-4">Let our team craft an experience your guests will never forget.</p>
+        <a th:href="@{/contact}" class="btn btn-accent btn-lg px-4 me-2"><i class="bi bi-chat-dots me-2"></i>Contact Us</a>
+        <a th:href="@{/booking}" class="btn btn-outline-light btn-lg px-4"><i class="bi bi-calendar-plus me-2"></i>Book Now</a>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

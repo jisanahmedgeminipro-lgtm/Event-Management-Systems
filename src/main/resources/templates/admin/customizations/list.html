@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-admin :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <h4 class="mb-4">Customization Items <small class="text-muted fs-6">(Custom Package Builder catalog)</small></h4>
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header" th:text="${itemForm.id} != null ? 'Edit Item' : 'Add Item'">Add</div>
+                <div class="card-body">
+                    <form th:action="@{/admin/customizations/save}" th:object="${itemForm}" method="post">
+                        <input type="hidden" th:field="*{id}">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input class="form-control" th:field="*{name}" th:errorclass="is-invalid">
+                            <div class="invalid-feedback" th:errors="*{name}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Type</label>
+                            <select class="form-select" th:field="*{type}">
+                                <option th:each="t : ${types}" th:value="${t}" th:text="${t.label}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price (৳)</label>
+                            <input type="number" step="0.01" class="form-control" th:field="*{price}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Unit</label>
+                            <input class="form-control" th:field="*{unit}" placeholder="package / plate / hour">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="2" th:field="*{description}"></textarea>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" th:field="*{active}" id="itActive">
+                            <label class="form-check-label" for="itActive">Active</label>
+                        </div>
+                        <button class="btn btn-purple w-100">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead><tr><th>Name</th><th>Type</th><th>Price</th><th>Unit</th><th>Status</th><th></th></tr></thead>
+                        <tbody>
+                        <tr th:each="i : ${items}">
+                            <td class="fw-semibold" th:text="${i.name}">Name</td>
+                            <td><span class="badge bg-light text-dark" th:text="${i.type.label}">Type</span></td>
+                            <td th:text="'৳' + ${#numbers.formatDecimal(i.price,1,'COMMA',0,'POINT')}">0</td>
+                            <td th:text="${i.unit}">unit</td>
+                            <td><span class="badge" th:classappend="${i.active}?'bg-success':'bg-secondary'" th:text="${i.active}?'Active':'Inactive'"></span></td>
+                            <td class="text-nowrap">
+                                <a th:href="@{'/admin/customizations/' + ${i.id} + '/edit'}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                                <form th:action="@{'/admin/customizations/' + ${i.id} + '/delete'}" method="post" class="d-inline" onsubmit="return confirm('Delete?');">
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(items)}"><td colspan="6" class="text-center text-muted py-4">No items yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

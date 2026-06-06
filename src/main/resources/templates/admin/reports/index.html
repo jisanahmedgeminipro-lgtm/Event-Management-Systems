@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/dashboard :: page(~{fragments/sidebar-admin :: sidebar}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="mb-0">Reports</h4>
+        <button class="btn btn-sm btn-outline-secondary d-print-none" onclick="window.print()"><i class="bi bi-printer me-1"></i>Print</button>
+    </div>
+
+    <!-- Summary -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3 col-6"><div class="card p-3 text-center"><div class="h4 text-purple mb-0" th:text="${stats.totalBookings}">0</div><small class="text-muted">Total Bookings</small></div></div>
+        <div class="col-md-3 col-6"><div class="card p-3 text-center"><div class="h4 text-success mb-0" th:text="'৳' + ${#numbers.formatDecimal(stats.collectedRevenue,1,'COMMA',0,'POINT')}">0</div><small class="text-muted">Revenue Collected</small></div></div>
+        <div class="col-md-3 col-6"><div class="card p-3 text-center"><div class="h4 text-danger mb-0" th:text="'৳' + ${#numbers.formatDecimal(stats.pendingPayments,1,'COMMA',0,'POINT')}">0</div><small class="text-muted">Outstanding</small></div></div>
+        <div class="col-md-3 col-6"><div class="card p-3 text-center"><div class="h4 mb-0" th:text="${stats.totalClients}">0</div><small class="text-muted">Clients</small></div></div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Booking report -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">Booking Report</div>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead><tr><th>Ref</th><th>Date</th><th>Status</th><th class="text-end">Total</th></tr></thead>
+                        <tbody>
+                        <tr th:each="b : ${bookings}">
+                            <td th:text="${b.bookingReference}">REF</td>
+                            <td class="small" th:text="${#temporals.format(b.eventDate,'dd MMM yy')}">date</td>
+                            <td><span class="badge bg-secondary badge-status" th:text="${b.status.label}">S</span></td>
+                            <td class="text-end" th:text="'৳' + ${#numbers.formatDecimal(b.totalAmount,1,'COMMA',0,'POINT')}">0</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(bookings)}"><td colspan="4" class="text-center text-muted py-3">No data</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Revenue report -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">Revenue / Payment Report</div>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead><tr><th>Booking</th><th class="text-end">Total</th><th class="text-end">Paid</th><th class="text-end">Due</th></tr></thead>
+                        <tbody>
+                        <tr th:each="p : ${payments}">
+                            <td th:text="${p.booking.bookingReference}">REF</td>
+                            <td class="text-end" th:text="'৳' + ${#numbers.formatDecimal(p.totalAmount,1,'COMMA',0,'POINT')}">0</td>
+                            <td class="text-end text-success" th:text="'৳' + ${#numbers.formatDecimal(p.paidAmount,1,'COMMA',0,'POINT')}">0</td>
+                            <td class="text-end text-danger" th:text="'৳' + ${#numbers.formatDecimal(p.dueAmount,1,'COMMA',0,'POINT')}">0</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(payments)}"><td colspan="4" class="text-center text-muted py-3">No data</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Client report -->
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">Client Report</div>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>City</th></tr></thead>
+                        <tbody>
+                        <tr th:each="c : ${clients}">
+                            <td th:text="${c.user.fullName}">Name</td>
+                            <td th:text="${c.user.email}">email</td>
+                            <td th:text="${c.user.phone}">phone</td>
+                            <td th:text="${c.city} ?: '-'">city</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(clients)}"><td colspan="4" class="text-center text-muted py-3">No data</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -428,3 +428,52 @@ body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; 
 .review-card { border-top: 3px solid var(--accent); }
 .section { padding: 80px 0; }
 .site-footer { background: linear-gradient(180deg, #20133a, #140b24); border-top: 3px solid var(--accent); }
+
+
+/* =========================================================================
+   HOME PAGE REDESIGN — dark/glass sections, events, testimonials (theme refresh)
+   ========================================================================= */
+.text-purple { color: var(--primary) !important; }
+
+.section-dark { position: relative; background: linear-gradient(160deg, #190e2e 0%, #2c1656 55%, #3d1a6e 100%); color: #efe9ff; }
+.section-dark .section-title { background: none !important; -webkit-text-fill-color: #fff !important; color: #fff !important; }
+.section-subtitle-light { color: #b9aede; margin-bottom: 2.5rem; }
+.section-dark .stars i { color: var(--accent); }
+
+.glass-card { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 2rem 1.4rem; text-align: center; backdrop-filter: blur(6px); transition: transform .25s ease, background .25s ease, box-shadow .25s ease; }
+.glass-card:hover { transform: translateY(-8px); background: rgba(255,255,255,.10); box-shadow: 0 18px 40px rgba(0,0,0,.30); }
+.glass-card .gc-icon { width: 64px; height: 64px; border-radius: 16px; margin: 0 auto 1rem; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; color: var(--dark); background: linear-gradient(135deg, var(--accent), #ffd451); box-shadow: 0 10px 22px rgba(244,180,0,.35); }
+.glass-card h5 { color: #fff; }
+.glass-card p { color: #c4b9e6; font-size: .88rem; margin: 0; }
+
+.stat-ic { font-size: 1.8rem; color: var(--accent); display: block; margin-bottom: .4rem; opacity: .9; }
+
+.event-type-card { background: #fff; border: 1px solid #efeaf7; border-radius: 14px; padding: 1.5rem 1rem; text-align: center; transition: all .25s ease; }
+.event-type-card i { font-size: 1.8rem; color: var(--primary); display: block; margin-bottom: .6rem; transition: all .25s; }
+.event-type-card h6 { transition: color .25s; }
+.event-type-card:hover { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); transform: translateY(-5px); box-shadow: 0 16px 32px rgba(106,27,154,.30); }
+.event-type-card:hover i, .event-type-card:hover h6 { color: #fff; }
+
+.upcoming-card { display: flex; gap: 1rem; align-items: center; background: #fff; border-radius: 16px; padding: 1.1rem; box-shadow: 0 8px 24px rgba(31,18,53,.07); border: 1px solid #f0ecf8; transition: transform .25s ease, box-shadow .25s ease; }
+.upcoming-card:hover { transform: translateY(-5px); box-shadow: 0 16px 36px rgba(31,18,53,.14); }
+.date-badge { flex-shrink: 0; width: 64px; height: 68px; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.date-badge .db-day { font-size: 1.5rem; font-weight: 700; line-height: 1; font-family: 'Playfair Display', serif; }
+.date-badge .db-mon { font-size: .7rem; text-transform: uppercase; letter-spacing: 1px; }
+
+.gallery-item { position: relative; border-radius: 14px; overflow: hidden; }
+.gallery-item img { width: 100%; height: 220px; object-fit: cover; transition: transform .5s ease; }
+.gallery-item:hover img { transform: scale(1.1); }
+.gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(31,18,53,.85), transparent 60%); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; opacity: 0; transition: opacity .3s ease; }
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-overlay i { font-size: 1.8rem; color: var(--accent); }
+.gallery-overlay span { font-size: .85rem; font-weight: 600; }
+
+.testimonial-card { position: relative; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 2rem 1.5rem 1.5rem; backdrop-filter: blur(6px); }
+.tc-quote { position: absolute; top: 12px; right: 18px; font-size: 2.8rem; color: rgba(244,180,0,.35); line-height: 1; }
+.tc-text { color: #d8cff0; font-style: italic; }
+.tc-author { display: flex; align-items: center; gap: .6rem; color: #fff; font-weight: 600; }
+.tc-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #ffd451); color: var(--dark); display: inline-flex; align-items: center; justify-content: center; }
+
+.cta-section { padding: 90px 0; position: relative; overflow: hidden; background: linear-gradient(135deg, #4a148c, #6a1b9a 60%, #2c1656); }
+.cta-section::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, rgba(244,180,0,.18), transparent 45%); }
+.cta-section h2 { color: #fff; }

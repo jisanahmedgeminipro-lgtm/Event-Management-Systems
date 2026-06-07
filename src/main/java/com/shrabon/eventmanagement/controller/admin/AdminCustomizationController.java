@@ -26,9 +26,6 @@ public class AdminCustomizationController {
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("active", "packages");
-        model.addAttribute("items", customizationService.findAll());
-        model.addAttribute("types", CustomizationType.values());
         if (!model.containsAttribute("itemForm")) {
             model.addAttribute("itemForm", new CustomizationItemForm());
         }
@@ -46,7 +43,7 @@ public class AdminCustomizationController {
         form.setPrice(item.getPrice());
         form.setUnit(item.getUnit());
         form.setActive(item.isActive());
-        model.addAttribute("active", "packages");
+        model.addAttribute("active", "customizations");
         model.addAttribute("items", customizationService.findAll());
         model.addAttribute("types", CustomizationType.values());
         model.addAttribute("itemForm", form);
@@ -59,7 +56,7 @@ public class AdminCustomizationController {
                        Model model,
                        RedirectAttributes ra) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("active", "packages");
+            model.addAttribute("active", "customizations");
             model.addAttribute("items", customizationService.findAll());
             model.addAttribute("types", CustomizationType.values());
             return "admin/customizations/list";

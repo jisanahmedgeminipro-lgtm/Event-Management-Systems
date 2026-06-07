@@ -6,14 +6,23 @@
     <h4 class="mb-4">Available Packages</h4>
     <div class="row g-4">
         <div class="col-lg-4 col-md-6" th:each="pkg : ${packages}">
-            <div class="card package-card">
-                <img class="card-img-top" th:src="${pkg.coverImage} ?: 'https://picsum.photos/seed/pkg' + ${pkg.id} + '/600/400'" alt="">
+            <div class="card package-card h-100">
+                <div class="pkg-media">
+                    <img th:src="${pkg.coverImage} ?: 'https://picsum.photos/seed/pkg' + ${pkg.id} + '/600/400'" alt="">
+                    <span class="pkg-cat" th:if="${pkg.category}" th:text="${pkg.category.name}">Cat</span>
+                    <span class="pkg-discount" th:if="${pkg.discountPercent != null and pkg.discountPercent.signum() > 0}"
+                          th:text="${pkg.discountPercent} + '% OFF'">OFF</span>
+                </div>
                 <div class="card-body d-flex flex-column">
-                    <span class="badge bg-success mb-2" th:if="${pkg.category}" th:text="${pkg.category.name}">Cat</span>
-                    <h5 th:text="${pkg.name}">Name</h5>
-                    <p class="small text-muted" th:text="${#strings.abbreviate(pkg.description,90)}">desc</p>
+                    <h5 class="mb-1" th:text="${pkg.name}">Name</h5>
+                    <p class="small text-muted mb-3" th:text="${#strings.abbreviate(pkg.description,80)}">desc</p>
+                    <div class="pkg-chips mb-3">
+                        <span class="pkg-chip" th:if="${pkg.decoration}"><i class="bi bi-flower1"></i> Decor</span>
+                        <span class="pkg-chip" th:if="${pkg.catering}"><i class="bi bi-cup-hot"></i> Catering</span>
+                        <span class="pkg-chip"><i class="bi bi-people"></i> <span th:text="${pkg.guestCapacity}">0</span></span>
+                    </div>
                     <div class="mt-auto">
-                        <div class="price-tag mb-2" th:text="'৳ ' + ${#numbers.formatDecimal(pkg.finalPrice,1,'COMMA',0,'POINT')}">৳0</div>
+                        <div class="price-tag mb-3" th:text="'৳ ' + ${#numbers.formatDecimal(pkg.finalPrice,1,'COMMA',0,'POINT')}">৳0</div>
                         <a th:href="@{/client/customize(packageId=${pkg.id})}" class="btn btn-success w-100"><i class="bi bi-sliders me-1"></i>Customize &amp; Book</a>
                     </div>
                 </div>

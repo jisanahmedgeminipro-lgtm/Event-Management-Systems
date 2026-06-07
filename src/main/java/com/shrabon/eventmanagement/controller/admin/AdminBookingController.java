@@ -1,7 +1,9 @@
 package com.shrabon.eventmanagement.controller.admin;
 
 import com.shrabon.eventmanagement.model.enums.BookingStatus;
+import com.shrabon.eventmanagement.model.Booking;
 import com.shrabon.eventmanagement.service.BookingService;
+import com.shrabon.eventmanagement.service.EmailService;
 import com.shrabon.eventmanagement.service.PaymentService;
 import com.shrabon.eventmanagement.service.StaffService;
 import org.springframework.stereotype.Controller;
@@ -18,13 +20,16 @@ public class AdminBookingController {
     private final BookingService bookingService;
     private final StaffService staffService;
     private final PaymentService paymentService;
+    private final EmailService emailService;
 
     public AdminBookingController(BookingService bookingService,
                                   StaffService staffService,
-                                  PaymentService paymentService) {
+                                  PaymentService paymentService,
+                                  EmailService emailService) {
         this.bookingService = bookingService;
         this.staffService = staffService;
         this.paymentService = paymentService;
+        this.emailService = emailService;
     }
 
     @GetMapping
@@ -49,8 +54,9 @@ public class AdminBookingController {
     public String updateStatus(@PathVariable Long id,
                                @RequestParam BookingStatus status,
                                RedirectAttributes ra) {
-        bookingService.updateStatus(id, status);
-        ra.addFlashAttribute("success", "Booking status updated to " + status.getLabel() + ".");
+        Booking booking = bookingService.updateStatus(id, status);
+        emailService.bookingStatus(booking);
+        ra.addFlashAttribute("success", "Booking status updated to " + status.getLabel() + ". The client has been notified by email.");
         return "redirect:/admin/bookings/" + id;
     }
 
@@ -58,8 +64,9 @@ public class AdminBookingController {
     public String assignStaff(@PathVariable Long id,
                               @RequestParam(required = false) Set<Long> staffIds,
                               RedirectAttributes ra) {
-        bookingService.assignStaff(id, staffIds);
-        ra.addFlashAttribute("success", "Assigned staff updated.");
+        Booking booking = bookingService.assignStaff(id, staffIds);
+        emailService.staffAssignment(booking.getAssignedStaff(), booking);
+        ra.addFlashAttribute("success", "Assigned staff updated. Assigned members have been notified by email.");
         return "redirect:/admin/bookings/" + id;
     }
 }

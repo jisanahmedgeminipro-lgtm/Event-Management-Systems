@@ -32,6 +32,74 @@
     }
 
     // Animated statistics counters
+    // Interactive star rating widget
+
+    var ratingBox = document.getElementById("ratingStars");
+
+    if (ratingBox) {
+
+        var stars = ratingBox.querySelectorAll(".star-label");
+
+        var paint = function (val) {
+
+            stars.forEach(function (label) {
+
+                var v = parseInt(label.getAttribute("data-value"), 10);
+
+                var icon = label.querySelector("i");
+
+                if (v <= val) {
+
+                    icon.classList.remove("bi-star");
+                    icon.classList.add("bi-star-fill");
+
+                    label.classList.add("filled");
+
+                } else {
+
+                    icon.classList.remove("bi-star-fill");
+                    icon.classList.add("bi-star");
+
+                    label.classList.remove("filled");
+                }
+            });
+        };
+
+        var currentRating = function () {
+
+            var checked =
+                ratingBox.querySelector("input.rating-radio:checked");
+
+            return checked ? parseInt(checked.value, 10) : 0;
+        };
+
+        stars.forEach(function (label) {
+
+            label.addEventListener("mouseenter", function () {
+
+                paint(parseInt(label.getAttribute("data-value"), 10));
+            });
+
+            label.addEventListener("click", function () {
+
+                var input =
+                    document.getElementById(label.getAttribute("for"));
+
+                if (input) {
+                    input.checked = true;
+                }
+
+                paint(currentRating());
+            });
+        });
+
+        ratingBox.addEventListener("mouseleave", function () {
+
+            paint(currentRating());
+        });
+
+        paint(currentRating());
+    }
     var counters = document.querySelectorAll("[data-count]");
     if (counters.length) {
         var run = function (el) {

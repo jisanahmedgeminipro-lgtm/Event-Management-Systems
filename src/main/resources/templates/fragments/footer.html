@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<footer th:fragment="footer" class="site-footer text-light pt-5 pb-3">
+<th:block th:fragment="footer">
+    <footer class="site-footer text-light pt-5 pb-3">
     <div class="container">
         <div class="row g-4">
             <div class="col-lg-4">
                 <h5 class="text-warning fw-bold"><i class="bi bi-gem me-1"></i>Shrabon Events</h5>
-                <p class="small text-secondary-emphasis">Shrabon Decorator &amp; Event Management — turning your special
-                    moments into unforgettable celebrations across Bangladesh.</p>
-                <p class="small mb-1"><i class="bi bi-person-badge me-2 text-warning"></i>Proprietor: Md. Tara Mia</p>
+                <p class="small mb-1">Shrabon Decorator &amp; Event Management — turning your special
+                    moments into unforgettable celebrations across Bangladesh.</p> <br>
+                <p class="small mb-1"><i class="bi bi-person-badge me-2 text-warning"></i>Proprietor : MD. Tara Mia</p>
             </div>
             <div class="col-lg-2 col-6">
                 <h6 class="text-uppercase fw-semibold">Company</h6>
@@ -32,8 +33,8 @@
                 <h6 class="text-uppercase fw-semibold">Get in Touch</h6>
                 <ul class="list-unstyled small footer-links">
                     <li><i class="bi bi-geo-alt me-2 text-warning"></i>Dhaka, Bangladesh</li>
-                    <li><i class="bi bi-telephone me-2 text-warning"></i>+880 1700-000000</li>
-                    <li><i class="bi bi-envelope me-2 text-warning"></i>info@shrabonevents.com</li>
+                    <li><i class="bi bi-telephone me-2 text-warning"></i>+880 1956560391</li>
+                    <li><i class="bi bi-envelope me-2 text-warning"></i>jfrtmsne@gmail.com</li>
                 </ul>
                 <div class="mt-2 social-icons">
                     <a href="#"><i class="bi bi-facebook"></i></a>
@@ -48,9 +49,11 @@
             &copy; <span th:text="${currentYear}">2026</span> Shrabon Decorator &amp; Event Management. All rights reserved.
         </div>
     </div>
-</footer>
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/main.js}"></script>
+    </footer>
+    <!-- Bootstrap JS + app JS: kept INSIDE the fragment so they load on every public page -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+</th:block>
 </body>
+
 </html>

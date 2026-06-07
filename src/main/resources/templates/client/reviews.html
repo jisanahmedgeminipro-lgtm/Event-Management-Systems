@@ -18,13 +18,34 @@
                             </select>
                         </div>
                         <div class="mb-3">
+
                             <label class="form-label d-block">Rating</label>
-                            <div class="rating-input fs-4">
+
+                            <div class="rating-input" id="ratingStars">
+
                                 <th:block th:each="i : ${#numbers.sequence(1,5)}">
-                                    <input type="radio" class="btn-check" th:field="*{rating}" th:value="${i}" th:id="'star' + ${i}">
-                                    <label class="text-warning" th:for="'star' + ${i}" style="cursor:pointer;"><i class="bi bi-star-fill"></i></label>
+
+                                    <input
+                                            type="radio"
+                                            class="d-none rating-radio"
+                                            th:field="*{rating}"
+                                            th:value="${i}"
+                                            th:id="'star' + ${i}">
+
+                                    <label
+                                            class="star-label"
+                                            th:for="'star' + ${i}"
+                                            th:data-value="${i}"
+                                            title="Rate">
+
+                                        <i class="bi bi-star"></i>
+
+                                    </label>
+
                                 </th:block>
+
                             </div>
+
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Comment</label>

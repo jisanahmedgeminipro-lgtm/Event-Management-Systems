@@ -1,9 +1,11 @@
 package com.shrabon.eventmanagement.controller.admin;
 
 import com.shrabon.eventmanagement.dto.TaskForm;
+import com.shrabon.eventmanagement.model.Task;
 import com.shrabon.eventmanagement.model.enums.TaskPriority;
 import com.shrabon.eventmanagement.model.enums.TaskStatus;
 import com.shrabon.eventmanagement.service.BookingService;
+import com.shrabon.eventmanagement.service.EmailService;
 import com.shrabon.eventmanagement.service.StaffService;
 import com.shrabon.eventmanagement.service.TaskService;
 import jakarta.validation.Valid;
@@ -20,13 +22,16 @@ public class AdminTaskController {
     private final TaskService taskService;
     private final StaffService staffService;
     private final BookingService bookingService;
+    private final EmailService emailService;
 
     public AdminTaskController(TaskService taskService,
                                StaffService staffService,
-                               BookingService bookingService) {
+                               BookingService bookingService,
+                               EmailService emailService) {
         this.taskService = taskService;
         this.staffService = staffService;
         this.bookingService = bookingService;
+        this.emailService = emailService;
     }
 
     private void populate(Model model) {
@@ -63,8 +68,9 @@ public class AdminTaskController {
             populate(model);
             return "admin/tasks/list";
         }
-        taskService.save(form);
-        ra.addFlashAttribute("success", "Task saved.");
+        Task saved = taskService.save(form);
+        emailService.taskAssignment(saved);
+        ra.addFlashAttribute("success", "Task saved." + (saved.getAssignedStaff() != null ? " Assigned staff notified by email." : ""));
         return "redirect:/admin/tasks";
     }
 

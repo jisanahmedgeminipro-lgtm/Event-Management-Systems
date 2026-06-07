@@ -1,4 +1,5 @@
 package com.shrabon.eventmanagement.controller;
+import com.shrabon.eventmanagement.service.EmailService;
 
 import com.shrabon.eventmanagement.dto.ContactForm;
 import com.shrabon.eventmanagement.service.*;
@@ -23,6 +24,7 @@ public class PublicController {
     private final ClientService clientService;
     private final StaffService staffService;
     private final ContactService contactService;
+    private final EmailService emailService;
 
     public PublicController(PackageService packageService,
                             EventCategoryService categoryService,
@@ -31,7 +33,8 @@ public class PublicController {
                             BookingService bookingService,
                             ClientService clientService,
                             StaffService staffService,
-                            ContactService contactService) {
+                            ContactService contactService,
+                            EmailService emailService) {
         this.packageService = packageService;
         this.categoryService = categoryService;
         this.galleryService = galleryService;
@@ -40,7 +43,9 @@ public class PublicController {
         this.clientService = clientService;
         this.staffService = staffService;
         this.contactService = contactService;
+        this.emailService = emailService;
     }
+
 
     @GetMapping({"/", "/home"})
     public String home(Model model) {
@@ -119,8 +124,9 @@ public class PublicController {
         if (bindingResult.hasErrors()) {
             return "public/contact";
         }
-        contactService.save(contactForm);
-        ra.addFlashAttribute("success", "Thank you! Your message has been sent. We will contact you soon.");
+        var saved = contactService.save(contactForm);
+        emailService.contactAcknowledgement(saved);
+        ra.addFlashAttribute("success", "Thank you! Your message has been sent. A confirmation email is on its way.");
         return "redirect:/contact";
     }
 }
